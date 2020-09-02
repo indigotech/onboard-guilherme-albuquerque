@@ -6,15 +6,15 @@ function App() {
     <div>
       <h1>Bem vindo(a) à Taqtile!</h1>
       <form>
-        <label> E-mail </label>
+        <label> E-mail
+          <input type="email" required={true} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+        </label>
 
-        <input/>
+        <label> Senha
+          <input type="password" required={true} pattern="(?=.*\d)(?=.*[a-z]).{7,}" title="No mínimo um número e uma letra, mais de 7 caracteres"/>
+        </label>
 
-        <label> Senha </label>
-
-        <input/>
-
-        <button>Entrar</button>
+        <input type="submit" />
       </form>
     </div>
   );
