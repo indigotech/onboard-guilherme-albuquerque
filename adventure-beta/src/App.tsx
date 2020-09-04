@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const client = new ApolloClient({
@@ -6,27 +6,42 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-const handleOnSubmit = (e: React.FormEvent) => {
-  e.preventDefault();
-  client
-    .mutate({
-      mutation: gql`
-        mutation {
-          login(data: { email: "admin@taqtile.com.br", password: "1234qwer" }) {
-            token
-          }
-        }
-      `,
-    })
-    .then((resp) => {
-      localStorage.setItem("@adventure-beta/token", resp.data.login.token);
-    })
-    .catch((err) => {
-      alert(err);
-    });
-};
-
 function App() {
+  const [loginInput, setLogin] = useState<string>("");
+  const [passwordInput, setPassword] = useState<string>("");
+
+  const handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    client
+      .mutate({
+        mutation: gql`
+          mutation {
+            login(data: { email: "${loginInput}", password: "${passwordInput}" }) {
+              token
+            }
+          }
+        `,
+      })
+      .then((resp) => {
+        localStorage.setItem("@adventure-beta/token", resp.data.login.token);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const handleLoginInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setLogin(event.target.value);
+  };
+
+  const handlePasswordInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPassword(event.target.value);
+  };
+
   return (
     <div>
       <h1>Bem vindo(a) à Taqtile!</h1>
@@ -38,6 +53,8 @@ function App() {
             type="email"
             required={true}
             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            onChange={handleLoginInputChange}
+            value={loginInput}
           />
         </label>
 
@@ -48,6 +65,8 @@ function App() {
             type="password"
             required={true}
             pattern="(?=.*\d)(?=.*[a-z]).{7,}"
+            onChange={handlePasswordInputChange}
+            value={passwordInput}
             title=" A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
             uma letra minúscula e um dígito. "
           />
