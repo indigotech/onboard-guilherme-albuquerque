@@ -10,11 +10,12 @@ const client = new ApolloClient({
 function LoginPage() {
   const [loginInput, setLogin] = useState<string>("");
   const [passwordInput, setPassword] = useState<string>("");
-
+  const [loginLoading, setLoading] = useState<boolean>(false);
 
   const history = useHistory();
 
   const handleOnSubmit = (e: React.FormEvent) => {
+    setLoading(true)
     e.preventDefault();
     client
       .mutate({
@@ -31,6 +32,7 @@ function LoginPage() {
         history.push("/home");
       })
       .catch((err) => {
+        setLoading(false)
         alert(err);
       });
   };
@@ -49,36 +51,42 @@ function LoginPage() {
 
   return (
     <div>
-      <h1>Bem vindo(a) à Taqtile!</h1>
-      <form onSubmit={handleOnSubmit}>
-        <label>
-          {"E-mail"}
+      {loginLoading ? (
+        <div> Loading...</div>
+      ) : (
+        <div>
+          <h1>Bem vindo(a) à Taqtile!</h1>
+          <form onSubmit={handleOnSubmit}>
+            <label>
+              {"E-mail"}
 
-          <input
-            type="email"
-            required={true}
-            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
-            onChange={handleLoginInputChange}
-            value={loginInput}
-          />
-        </label>
+              <input
+                type="email"
+                required={true}
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                onChange={handleLoginInputChange}
+                value={loginInput}
+              />
+            </label>
 
-        <label>
-          {"Senha"}
+            <label>
+              {"Senha"}
 
-          <input
-            type="password"
-            required={true}
-            pattern="(?=.*\d)(?=.*[a-z]).{7,}"
-            onChange={handlePasswordInputChange}
-            value={passwordInput}
-            title=" A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
-            uma letra minúscula e um dígito. "
-          />
-        </label>
+              <input
+                type="password"
+                required={true}
+                pattern="(?=.*\d)(?=.*[a-z]).{7,}"
+                onChange={handlePasswordInputChange}
+                value={passwordInput}
+                title=" A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
+              uma letra minúscula e um dígito. "
+              />
+            </label>
 
-        <input type="submit" value="Entrar" />
-      </form>
+            <input type="submit" value="Entrar" />
+          </form>
+        </div>
+      )}
     </div>
   );
 }
