@@ -1,24 +1,78 @@
-import React from "react";
+import React, { useState } from "react";
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
+const client = new ApolloClient({
+  uri: "https://tq-template-server-sample.herokuapp.com/graphql",
+  cache: new InMemoryCache(),
+});
 
 function App() {
+  const [loginInput, setLogin] = useState<string>("");
+  const [passwordInput, setPassword] = useState<string>("");
+
+  const handleOnSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    client
+      .mutate({
+        mutation: gql`
+          mutation {
+            login(data: { email: "${loginInput}", password: "${passwordInput}" }) {
+              token
+            }
+          }
+        `,
+      })
+      .then((resp) => {
+        localStorage.setItem("@adventure-beta/token", resp.data.login.token);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
+
+  const handleLoginInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setLogin(event.target.value);
+  };
+
+  const handlePasswordInputChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setPassword(event.target.value);
+  };
+
   return (
     <div>
       <h1>Bem vindo(a) à Taqtile!</h1>
-      <form>
-        <label> E-mail
+      <form onSubmit={handleOnSubmit}>
+        <label>
+          {"E-mail"}
+
           <input
-            type="email" required={true} pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"/>
+            type="email"
+            required={true}
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+            onChange={handleLoginInputChange}
+            value={loginInput}
+          />
         </label>
 
-        <label> Senha
+        <label>
+          {"Senha"}
+
           <input
-            type="password" required={true} pattern="(?=.*\d)(?=.*[a-z]).{7,}"
+            type="password"
+            required={true}
+            pattern="(?=.*\d)(?=.*[a-z]).{7,}"
+            onChange={handlePasswordInputChange}
+            value={passwordInput}
             title=" A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
-            uma letra minúscula e um dígito. "/>
+            uma letra minúscula e um dígito. "
+          />
         </label>
 
-        <input type="submit" value="Entrar"/>
+        <input type="submit" value="Entrar" />
       </form>
     </div>
   );
