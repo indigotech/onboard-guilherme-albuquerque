@@ -3,11 +3,6 @@ import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { useHistory } from "react-router-dom";
 import { loginRequisition } from "./services/queryGQL";
 
-const client = new ApolloClient({
-  uri: "https://tq-template-server-sample.herokuapp.com/graphql",
-  cache: new InMemoryCache(),
-});
-
 function LoginPage() {
   const [loginInput, setLogin] = useState<string>("");
   const [passwordInput, setPassword] = useState<string>("");
