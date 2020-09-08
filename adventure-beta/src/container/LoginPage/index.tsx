@@ -61,7 +61,7 @@ function LoginPage() {
             pattern="(?=.*\d)(?=.*[a-z]).{7,}"
             onChange={handlePasswordInputChange}
             value={passwordInput}
-            title=" A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
+            title="A sua senha deve ter pelo menos 7 caracteres e conter pelo menos:
             uma letra minúscula e um dígito. "
           />
         </label>
