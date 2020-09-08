@@ -11,7 +11,7 @@ const client = new ApolloClient({
 function LoginPage() {
   const [loginInput, setLogin] = useState<string>("");
   const [passwordInput, setPassword] = useState<string>("");
-  const [loadingLogin, setLoading] = useState<boolean>(false)
+  const [loadingLogin, setLoading] = useState<boolean>(false);
 
   const history = useHistory();
 
@@ -22,7 +22,7 @@ function LoginPage() {
       await loginRequisition(loginInput, passwordInput);
       history.push("/home");
     } catch (err) {
-      setLoading(false)
+      setLoading(false);
       alert(err);
     }
   };
@@ -69,7 +69,7 @@ function LoginPage() {
           />
         </label>
 
-        <input type="submit" value={loadingLogin? "Carregando":"Entrar"} />
+        <input type="submit" value={loadingLogin ? "Carregando" : "Entrar"} />
       </form>
     </div>
   );
