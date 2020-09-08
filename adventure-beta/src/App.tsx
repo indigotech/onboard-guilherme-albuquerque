@@ -1,6 +1,6 @@
 import React from "react";
 import LoginPage from "./container/LoginPage/index";
-import BlankPage from "./container/BlankPage/index";
+import UsersPage from "./container/UsersPage/index";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         </Route>
 
         <Route exact path={"/home"}>
-          <BlankPage />
+          <UsersPage />
         </Route>
       </Switch>
     </BrowserRouter>
