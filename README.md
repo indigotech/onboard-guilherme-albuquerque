@@ -9,13 +9,15 @@
 ### Environment and tools
 
     Enviroment: MacOS.
-    Tools: Git, VSCode, ReactTS, Node v12.17.0
- 
+    Tools: Git, VSCode, ReactTS, Node v12.17.0,
 
+### Dev Dependencies
 
-    
+    • Apollo
+    • React
+    • React-DOM
+    • React-Router-Dom
    
-
 ### Steps to run and debug
 
     To run this project, install it locally using npm:
