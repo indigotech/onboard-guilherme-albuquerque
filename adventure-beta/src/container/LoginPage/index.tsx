@@ -11,15 +11,18 @@ const client = new ApolloClient({
 function LoginPage() {
   const [loginInput, setLogin] = useState<string>("");
   const [passwordInput, setPassword] = useState<string>("");
+  const [loadingLogin, setLoading] = useState<boolean>(false);
 
   const history = useHistory();
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await loginRequisition(loginInput, passwordInput);
       history.push("/home");
     } catch (err) {
+      setLoading(false);
       alert(err);
     }
   };
@@ -66,7 +69,7 @@ function LoginPage() {
           />
         </label>
 
-        <input type="submit" value="Entrar" />
+        <input type="submit" value={loadingLogin ? "Carregando" : "Entrar"} />
       </form>
     </div>
   );
