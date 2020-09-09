@@ -1,79 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { getAllUsers } from "./services/queryGQL";
 
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-  createHttpLink,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
-import { render } from "@testing-library/react";
-
-const httpLink = createHttpLink({
-  uri: "https://tq-template-server-sample.herokuapp.com/graphql",
-});
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("@adventure-beta/token");
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `${token}` : "",
-    },
-  };
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
+import { useHistory } from "react-router-dom";
 
 function UsersPage() {
   const [usersList, setUsersList] = useState([]);
 
+  const history = useHistory();
 
-  const getAllUsers = async ():Promise<void> => {
-    return client
-      .query({
-        query: gql`
-          query getUsers{
-            users(pageInfo : {offset:${0}, limit:${10}}){
-              nodes {
-                name
-                email
-              }
-            }
-          }
-        `,
-      })
-      .then((resp) => {
-        const fetchData =  resp.data.users.nodes
-       setUsersList(fetchData)
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  useEffect(() => {
+    async function fetchUsers() {
+      const fetchAllUsers = await getAllUsers();
+      setUsersList(fetchAllUsers);
+    }
+    fetchUsers();
+  }, []);
 
-  getAllUsers();
-  console.log(usersList)
-
-   {
   return (
     <div>
       <h1>Usuários Cadastrados</h1>
+
       {usersList.map((user: any) => {
         return (
-        <div>
-          <p>{user.name}</p>
-          <p>{user.email}</p>
-          <br></br>
-        </div>
-        )
+          <div>
+            <p>{user.name}</p>
+            <p>{user.email}</p>
+            <br></br>
+          </div>
+        );
       })}
-
     </div>
   );
 }
-}
+
 export default UsersPage;
