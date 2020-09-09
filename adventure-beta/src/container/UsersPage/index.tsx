@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, HtmlHTMLAttributes } from "react";
 import { getAllUsers } from "./services/queryGQL";
 
 import { useHistory } from "react-router-dom";
@@ -16,9 +16,15 @@ function UsersPage() {
     fetchUsers();
   }, []);
 
+  const handleClick = () => {
+    history.push("/new-user")
+  }
+
   return (
     <div>
       <h1>Usuários Cadastrados</h1>
+
+      <button onClick={handleClick}>Adicionar novo usuário</button>
 
       {usersList.map((user: any) => {
         return (
