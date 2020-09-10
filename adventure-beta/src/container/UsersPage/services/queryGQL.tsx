@@ -25,7 +25,7 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const getAllUsers = async (): Promise<any> => {
+export const getAllUsers = (): Promise<any> => {
   return client
     .query({
       query: gql`
