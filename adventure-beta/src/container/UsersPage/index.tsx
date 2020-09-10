@@ -1,35 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { getAllUsers } from "./services/queryGQL";
 
-const mockUsers = [
-  {
-    name: ["Gui"],
-    email: ["guilherme.albuquerque@taqtile.com.br"],
-  },
-  {
-    name: ["Alan"],
-    email: ["alan@taqtile.com.br"],
-  },
-  {
-    name: ["Matt"],
-    email: ["matheus@taqtile.com.br"],
-  },
-  {
-    name: ["Felipe"],
-    email: ["Felipetaqtile.com.br"],
-  },
-];
+import { useHistory } from "react-router-dom";
 
 function UsersPage() {
+  const [usersList, setUsersList] = useState([]);
+
+  const history = useHistory();
+
+  useEffect(() => {
+    async function fetchUsers() {
+      const fetchAllUsers = await getAllUsers();
+      setUsersList(fetchAllUsers);
+    }
+    fetchUsers();
+  }, []);
+
   return (
     <div>
       <h1>Usuários Cadastrados</h1>
 
-      {mockUsers.map((user) => {
+      {usersList.map((user: any) => {
         return (
           <div>
             <p>{user.name}</p>
             <p>{user.email}</p>
-            <hr></hr>
+            <br></br>
           </div>
         );
       })}
