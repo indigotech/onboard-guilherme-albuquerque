@@ -25,25 +25,33 @@ const client = new ApolloClient({
   cache: new InMemoryCache(),
 });
 
-export const getAllUsers = (): Promise<any> => {
+interface ID {
+  id: string;
+}
+
+export const queryUser = gql`
+  query getUserDetails($id: ID!) {
+    user(id: $id) {
+      id
+      name
+      phone
+      birthDate
+      email
+      role
+    }
+  }
+`;
+
+export const userDetailsquery = (idUser: ID): Promise<any> =>{
   return client
-    .query({
-      query: gql`
-        query getUsers{
-          users(pageInfo : {offset:${0}, limit:${10}}){
-            nodes {
-              name
-              email
-              id
-            }
-          }
-        }
-      `,
+    .mutate({
+      mutation: queryUser,
+      variables: {id: idUser},
     })
-    .then((resp) => {
-      return resp.data.users.nodes;
+    .then ((resp) => {
+      console.log(resp.data.user)
+      return resp.data.user
+    }) .catch((err) => {
+      throw(err)
     })
-    .catch((err) => {
-      throw err;
-    });
-};
+}

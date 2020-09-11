@@ -3,7 +3,7 @@ import { getAllUsers } from "./services/queryGQL";
 
 import { useHistory } from "react-router-dom";
 
-function UsersPage() {
+function UsersPage(props:any) {
   const [usersList, setUsersList] = useState([]);
 
   const history = useHistory();
@@ -16,19 +16,27 @@ function UsersPage() {
     fetchUsers();
   }, []);
 
-  const handleClick = () => {
+  const handleClickNewUser = () => {
     history.push("/new-user")
+  }
+
+  const handleIdProps = (id:string) => { //remover any
+
+      props.selectedId(id)
+      history.push("/user-details")
+
+
   }
 
   return (
     <div>
       <h1>Usuários Cadastrados</h1>
 
-      <button onClick={handleClick}>Adicionar novo usuário</button>
+      <button onClick={handleClickNewUser}>Adicionar novo usuário</button>
 
       {usersList.map((user: any) => {
         return (
-          <div>
+          <div onClick={() => handleIdProps(user.id)}>
             <p>{user.name}</p>
             <p>{user.email}</p>
             <br></br>
