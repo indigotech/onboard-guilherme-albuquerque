@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { FormContainer } from "./style";
+import { newUserMutate } from "./services/queryGQL";
+import { useHistory } from "react-router-dom";
 
 function NewUser() {
   const [state, setState] = useState({
@@ -11,6 +13,8 @@ function NewUser() {
     role: "",
   });
 
+  const history = useHistory();
+
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setState({
@@ -19,9 +23,19 @@ function NewUser() {
     });
   };
 
+  const handleNewUserReq = async () => {
+    try {
+      await newUserMutate(state);
+      history.push("/home");
+      alert("Usuário criado com sucesso");
+    } catch (err) {
+      alert(err);
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(state);
+    handleNewUserReq();
   };
   return (
     <div>
@@ -94,14 +108,22 @@ function NewUser() {
 
         <label>
           {"Papel no sistema"}
-
           <input
-            type="text"
+            type="radio"
             name="role"
-            value={state.role}
+            value="user"
+            required={true}
+            onChange={handleInput}
+          />{" "}
+          User
+          <input
+            type="radio"
+            name="role"
+            value="admin"
             required={true}
             onChange={handleInput}
           />
+          Admin
         </label>
 
         <input type="submit" value="Criar usuário" />
