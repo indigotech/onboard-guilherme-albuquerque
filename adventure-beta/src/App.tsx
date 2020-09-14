@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import LoginPage from "./container/LoginPage/index";
 import UsersPage from "./container/UsersPage/index";
 import NewUser from "./container/NewUserPage/index";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
+import UserDetails from "./container/UserDetails/index";
+import { BrowserRouter, Route, Switch} from "react-router-dom";
+
 
 function App() {
   return (
@@ -17,7 +19,11 @@ function App() {
         </Route>
 
         <Route exact path={"/home"}>
-          <UsersPage />
+          <UsersPage/>
+        </Route>
+
+        <Route exact path={"/user-details/:id"}>
+          <UserDetails />
         </Route>
       </Switch>
     </BrowserRouter>

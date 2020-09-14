@@ -34,6 +34,7 @@ export const getAllUsers = (): Promise<any> => {
             nodes {
               name
               email
+              id
             }
           }
         }
