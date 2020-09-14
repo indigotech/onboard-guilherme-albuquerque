@@ -1,30 +1,8 @@
 import {
-  ApolloClient,
-  InMemoryCache,
   gql,
-  createHttpLink,
 } from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
 
-
-const httpLink = createHttpLink({
-  uri: "https://tq-template-server-sample.herokuapp.com/graphql",
-});
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("@adventure-beta/token");
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `${token}` : "",
-    },
-  };
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
+import { client } from "./../../UsersPage//services/queryGQL";
 
 interface UserInputType {
   name: string;
@@ -43,7 +21,7 @@ export const newMutation = gql`
   }
 `;
 
-export const newUserMutate = (newUserData: UserInputType): Promise<any> => {
+export const newUserMutate = (newUserData: UserInputType): Promise<boolean> => {
   return client
     .mutate({
       mutation: newMutation,
