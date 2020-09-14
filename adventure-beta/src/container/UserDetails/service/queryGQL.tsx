@@ -1,33 +1,6 @@
-import {
-  ApolloClient,
-  InMemoryCache,
-  gql,
-  createHttpLink,
-} from "@apollo/client";
-import { setContext } from "@apollo/client/link/context";
+import { gql } from "@apollo/client";
 
-const httpLink = createHttpLink({
-  uri: "https://tq-template-server-sample.herokuapp.com/graphql",
-});
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem("@adventure-beta/token");
-  return {
-    headers: {
-      ...headers,
-      authorization: token ? `${token}` : "",
-    },
-  };
-});
-
-const client = new ApolloClient({
-  link: authLink.concat(httpLink),
-  cache: new InMemoryCache(),
-});
-
-interface ID {
-  id: string;
-}
+import { client } from "../../UsersPage/services/queryGQL";
 
 export const queryUser = gql`
   query getUserDetails($id: ID!) {
@@ -42,16 +15,18 @@ export const queryUser = gql`
   }
 `;
 
-export const userDetailsquery = (idUser: ID): Promise<any> =>{
+export const userDetailsquery = (idUser: string): Promise<any> => {
   return client
     .mutate({
       mutation: queryUser,
-      variables: {id: idUser},
+      variables: { id: idUser },
     })
-    .then ((resp) => {
-      console.log(resp.data.user)
-      return resp.data.user
-    }) .catch((err) => {
-      throw(err)
+    .then((resp) => {
+      console.log(resp.data.user);
+      return resp.data.user;
     })
-}
+    .catch((err) => {
+      console.log(idUser);
+      throw err;
+    });
+};
